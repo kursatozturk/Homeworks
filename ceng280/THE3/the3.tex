@@ -1,0 +1,237 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{float}
+\usepackage{amsmath}
+
+
+\usepackage[hmargin=3cm,vmargin=6.0cm]{geometry}
+%\topmargin=0cm
+\topmargin=-2cm
+\addtolength{\textheight}{6.5cm}
+\addtolength{\textwidth}{2.0cm}
+%\setlength{\leftmargin}{-5cm}
+\setlength{\oddsidemargin}{0.0cm}
+\setlength{\evensidemargin}{0.0cm}
+
+%misc libraries goes here
+\usepackage{tikz}
+\usetikzlibrary{automata,positioning}
+
+\begin{document}
+
+\section*{Student Information } 
+%Write your full name and id number between the colon and newline
+%Put one empty space character after colon and before newline
+Full Name :  Kürşat Öztürk\\
+Id Number :  2171874\\
+
+% Write your answers below the section tags
+\section*{Answer 1}
+
+\subsection*{a.}
+$M=(K, \Sigma, \Delta, p, F)$, where \\
+$K=\{p,q\}, F= {q}, $\\
+$\Delta = \{ ((p,a,e),(p,a)),$\\
+$((p,b,e),(p,b)),$ \\
+$((p,c,e),(p,c)),$ \\
+$((p,e,e),(p,X)),$ \\
+$((p,e,Xb),(p,X)),$ \\
+$((p,e,Xa),(p,X)),$ \\
+$((p,e,XaXSa),(p,S)),$ \\
+$((p,e,XbXSb),(p,S)),$ \\
+$((p,e,c),(p,S)),$ \\
+$((p,e,S),(q,e)) \}$ \\
+
+
+\subsection*{b.}
+(p, abbcbabbaa, e) $\vdash_M$ (p, bbcbabbaa, a) \\
+(p, bbcbabbaa, a) $\vdash_M$ (p, bcbabbaa, ba) \\
+(p, bcbabbaa, ba) $\vdash_M$ (p, cbabbaa, bba) \\
+(p, cbabbaa, bba) $\vdash_M$ (p, babbaa, cbba) \\
+(p, babbaa, cbba) $\vdash_M$ (p, babbaa, Sbba) \\
+(p, babbaa, Sbba) $\vdash_M$ (p, babbaa, XSbba) \\
+(p, babbaa, XSbba) $\vdash_M$ (p, abbaa, bXSbba) \\
+(p, abbaa, bXSbba) $\vdash_M$ (p, bbaa, abXSbba) \\
+(p, bbaa, abXSbba) $\vdash_M$ (p, bbaa, XabXSbba) \\
+(p, bbaa, XabXSbba) $\vdash_M$ (p, bbaa, XbXSbba) \\
+(p, bbaa, XbXSbba) $\vdash_M$ (p, bbaa, Sba) \\
+(p, bbaa, Sba) $\vdash_M$ (p, bbaa, XSba) \\
+(p, bbaa, XSba) $\vdash_M$ (p,baa, bXSba) \\
+(p, baa, bXSba) $\vdash_M$ (p,aa, bbXSba) \\
+(p, aa, bbXSba) $\vdash_M$ (p,aa, XbbXSba) \\
+(p, aa, XbbXSba) $\vdash_M$ (p,aa, XbXSba) \\
+(p, aa, XbXSba) $\vdash_M$ (p,aa, Sa) \\
+(p, aa, Sa) $\vdash_M$ (p,aa, XSa) \\
+(p, aa, XSa) $\vdash_M$ (p,a, aXSa) \\
+(p, a, aXSa) $\vdash_M$ (p,e, aaXSa) \\
+(p, e, aaXSa) $\vdash_M$ (p,e, XaaXSa) \\
+(p, e, XaaXSa) $\vdash_M$ (p,e, XaXSa) \\
+(p, e, XaaXSa) $\vdash_M$ (p,e, S) \\
+(p, e S) $\vdash_M$ (q,e) \\
+
+\section*{Answer 2}
+
+\subsection*{a.}
+%Do not submit solutions for b, yet solve it to prepare for the final.
+We can define the Turing Machine which computes f(x) as $M_1 = (K, \Sigma, \delta, s, H)$, where \\
+$K =\{s, q_0, q_1, q_2, q_3, q_4, q_5, q_6, q_7,q_8, h\}$,\\
+$ \Sigma = \{ \sqcup, 1, \triangleright \}$,\\
+$H = \{h\}$ and the transition function is defined as follows; \\
+$\delta(s, \sqcup) )= (q_0, \rightarrow)$\\
+$\delta(q_0, 1) ) =(q_1, \rightarrow)$\\
+$\delta(q_1, 1) )= (q_0, \rightarrow)$\\
+$\delta(q_1, \sqcup) )= (q_2, 1)$\\
+$\delta(q_2, 1) )= (h, \rightarrow)$\\
+$\delta(q_0, \sqcup) )= (q_3, \leftarrow)$\\
+$\delta(q_3, 1) )= (q_3, \leftarrow)$\\
+$\delta(q_3, \sqcup) )= (q_4, \rightarrow)$\\
+$\delta(q_4, 1) ) =(q_5, m)$\\
+$\delta(q_5, m) ) =(q_5, \rightarrow)$\\
+$\delta(q_5, 1) ) =(q_5, \rightarrow)$\\
+$\delta(q_5, \sqcup) )= (q_5, \leftarrow)$\\
+$\delta(q_6, 1) ) =(q_0, \sqcup)$\\
+$\delta(q_3, m) ) =(q_7, 1)$\\
+$\delta(q_7, 1) ) =(q_4, \rightarrow)$\\
+$\delta(q_4, \sqcup) )= (h, \sqcup)$\\
+
+\section*{Answer 3}
+It will be the regular languages accpeted by some finite automata.
+
+Since Turing machines do not have  any  memory (like pushdown automata's stack), move-restricted Turing Machine's computes only the current input symbol, and once it read and passed (i.e. moved right),  it won't have any idea what's back. Since it cannot turn back to any symbol, writing will not change anything. Consequently, it will act like finite automata.
+
+\section*{Answer 4}
+
+\subsection*{a.}
+Let $M = (K, \Sigma, \delta, s, H)$, where \\
+K is a finite set of states such that : \\
+$K = \{s, f, r, e, d, h\}$ ,\\
+$\Sigma$ is an alphabet, \\
+$s \in K$ is the initial state, \\
+$H \subset K $ is the set of halting states. \\
+$\delta$ the transition function: \\
+$(K-H) x (\Sigma x \Sigma)$ to $ K x ((\Sigma) x (\Sigma))$ \\
+\subsection*{b.}
+Configuration for TM is a member of $ K x \triangleright \Sigma$*$ x (\Sigma$ *$ (\Sigma - \{ \sqcup \}) U \{ e \})$. \\
+\subsection*{c.}
+
+\subsection*{d.}
+
+\subsection*{e.}
+
+
+
+
+\section*{Answer 5}
+
+\subsection*{a}
+\begin{center}
+\begin{tikzpicture}[scale=0.2]
+\tikzstyle{every node}+=[inner sep=0pt]
+
+\draw (2.8,-13.7) node {$RufLu$};
+
+\draw (9,-13.7) node {$R$};
+
+\draw (15.1,-13.7) node {$m$};
+
+\draw (21,-13.7) node {$R$};
+
+\draw (32.1,-13.7) node {$n$};
+
+\draw (37.5,-13.7) node {$R$};
+
+\draw (43.5,-13.7) node {$Ln$};
+
+\draw (49.4,-13.7) node {$L$};
+
+\draw (58.3,-13.7) node {$bR$};
+
+\draw (61.4,-25.1) node {$R$};
+
+\draw (71.3,-19.8) node {$uLuLuLf$};
+
+\draw (75.7,-29.3) node {$L$};
+
+\draw (9,-28) node {$R$};
+
+\draw (17.5,-37.3) node {$Yes$};
+\draw [black] (19.677,-11.02) arc (234:-54:2.25);
+\draw (21,-6.45) node [above] {$a$};
+\fill [black] (22.32,-11.02) -- (23.2,-10.67) -- (22.39,-10.08);
+\draw [black] (24,-13.7) -- (29.1,-13.7);
+\fill [black] (29.1,-13.7) -- (28.3,-13.2) -- (28.3,-14.2);
+\draw (26.55,-14.2) node [below] {$b$};
+\draw [black] (37.156,-10.732) arc (214.34618:-73.65382:2.25);
+\draw (40.69,-6.81) node [above] {$b$};
+\fill [black] (39.65,-11.62) -- (40.59,-11.58) -- (40.03,-10.76);
+\draw [black] (48.69,-10.797) arc (221.47119:-66.52881:2.25);
+\draw (51.5,-6.53) node [above] {$b$};
+\fill [black] (51.27,-11.37) -- (52.2,-11.22) -- (51.54,-10.47);
+\draw [black] (56.987,-16.391) arc (-32.17075:-147.82925:13.926);
+\fill [black] (33.41,-16.39) -- (33.42,-17.33) -- (34.26,-16.8);
+\draw (45.2,-23.4) node [below] {$b$};
+\draw [black] (52.4,-13.7) -- (55.3,-13.7);
+\fill [black] (55.3,-13.7) -- (54.5,-13.2) -- (54.5,-14.2);
+\draw (53.85,-14.2) node [below] {$n$};
+\draw [black] (59.804,-22.573) arc (240.00901:-47.99099:2.25);
+\draw (60.5,-17.81) node [above] {$c$};
+\fill [black] (62.43,-22.3) -- (63.27,-21.85) -- (62.4,-21.35);
+\draw [black] (64.04,-23.68) -- (68.66,-21.22);
+\fill [black] (68.66,-21.22) -- (67.71,-21.15) -- (68.19,-22.03);
+\draw (67.18,-22.95) node [below] {$f$};
+\draw [black] (75.314,-32.263) arc (20.30993:-267.69007:2.25);
+\draw (68.23,-35.42) node [below] {$c,b,n,a,f$};
+\fill [black] (73.11,-30.8) -- (72.19,-30.6) -- (72.54,-31.54);
+\draw [black] (72.56,-22.52) -- (74.44,-26.58);
+\fill [black] (74.44,-26.58) -- (74.56,-25.64) -- (73.65,-26.06);
+\draw [black] (73.25,-31.031) arc (-56.69131:-149.63647:44.492);
+\fill [black] (10.43,-16.34) -- (10.4,-17.28) -- (11.26,-16.78);
+\draw [black] (6.32,-29.323) arc (-36:-324:2.25);
+\draw (1.75,-28) node [left] {$n$};
+\fill [black] (6.32,-26.68) -- (5.97,-25.8) -- (5.38,-26.61);
+\draw [black] (9,-16.7) -- (9,-25);
+\fill [black] (9,-25) -- (9.5,-24.2) -- (8.5,-24.2);
+\draw (8.5,-20.85) node [left] {$n$};
+\draw [black] (11.02,-30.21) -- (15.48,-35.09);
+\fill [black] (15.48,-35.09) -- (15.31,-34.16) -- (14.57,-34.83);
+\draw (12.71,-34.11) node [left] {$f$};
+\end{tikzpicture}
+\end{center}
+
+\subsection*{b.}
+G  = (V, $\Sigma$, R, S), where \\
+$V = \{S,a,b,c,A,B,C,R,K,L\},$\\
+$\Sigma = \{a,b,c\},$ and \\
+$R=\{S \rightarrow RB,$\\
+$R \rightarrow e$, \\
+$RB \rightarrow KABBCCC$,\\
+$K \rightarrow KK$,\\
+$K \rightarrow e$,\\
+$KA \rightarrow  AK$,\\
+$KB \rightarrow  ABBL$,\\
+$LB \rightarrow ABL$,\\
+$LC \rightarrow CCCC$,\\
+$A \rightarrow a$,\\
+$B \rightarrow b$,\\
+$C \rightarrow c\}.$\\
+
+
+
+\section*{Answer 6}
+
+\subsection*{a.}
+
+\subsection*{b.}
+
+\subsection*{c.}
+
+\subsection*{d.}
+
+
+%Do not submit solutions for Question 7, yet do solve it.
+
+
+\end{document}
+
+​
+

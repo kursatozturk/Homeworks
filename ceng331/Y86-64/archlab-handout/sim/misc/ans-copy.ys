@@ -1,0 +1,42 @@
+# 2171874
+# Kürşat Öztürk
+
+.pos 0
+    irmovq  stack, %rsp
+    irmovq  src, %rdi
+    irmovq  dest, %rsi
+    irmovq  $3, %rdx
+    call copy_block
+
+.align 8
+# Source block
+src:
+.quad   0x00a
+.quad   0x0b0
+.quad   0xc00
+# Destination
+dest:
+.quad   0x111
+.quad   0x222
+.quad   0x333
+
+copy_block:
+    irmovq  $0, %rax    #result = 0
+    irmovq  $8, %r8
+    irmovq  $1, %r10
+    jmp     .TEST
+.LOOP:
+    mrmovq  (%rdi), %r9 
+    xorq    %r9, %rax # result ^= *src
+    rmmovq  %r9, (%rsi) # *dst = *src
+    addq    %r8, %rdi # src++
+    addq    %r8, %rsi # dst++
+    subq    %r10, %rdx # len--
+.TEST:
+    andq    %rdx, %rdx
+    jg      .LOOP
+.DONE:
+    ret
+
+.pos 200
+stack:

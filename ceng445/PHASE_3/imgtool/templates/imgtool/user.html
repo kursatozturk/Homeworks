@@ -1,0 +1,50 @@
+{% extends "imgtool/base.html" %}
+
+{% block title %}User Page{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h3 class="my-4">
+      {{user.username}}
+    </h3>
+    <div class="row">
+      {% for image_path, name, owner in image_list %}
+      <div class="col-md-6 mb-3">
+          <div class="card" style="width: 18rem;">
+              <img class="card-img-top" src="{{ MEDIA_URL }}{{ image_path }}" alt="{{name}}">
+              <div class="card-body">
+                  <h6 class="card-title"><a href={% url 'imgtool:image' image_name=name %}>{{name}} </a></h6>
+                  <p class="card-text"><a href={% url 'imgtool:user' username=owner %}>{{owner}}</a></p>
+              </div>
+          </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div>
+      <h5> Groups: </h5>
+      <ul class="list-group mb-3">
+        {% for group in groups %}
+            <li class="list-group-item">{{ group.groupname }}</li>
+          {% endfor %}
+      </ul>
+    </div>
+      {% if self_page %}
+      <div class="jumbotron py-3">
+        <form method="post">
+            {% csrf_token %}
+          <div class="form-group">
+            <label for="setPassword"> <b>Validate Password</b></label>
+            <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+          </div>
+          {{ groupform.as_p }}
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+    {% endif %}
+
+    
+  </div>
+
+
+{% endblock %}

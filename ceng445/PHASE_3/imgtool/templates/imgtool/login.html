@@ -1,0 +1,25 @@
+{% extends "imgtool/base.html" %}
+
+{% block title %}Login Page{% endblock %}
+
+{% block content%}
+
+<div class="container mt-3">
+    <div>
+    <div> {{ msg }}</div>
+        <form method="POST">
+                {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" name="username" class="form-control" id="username" placeholder="Enter username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

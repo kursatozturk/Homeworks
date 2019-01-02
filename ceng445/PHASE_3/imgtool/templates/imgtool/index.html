@@ -1,0 +1,28 @@
+{% extends "imgtool/base.html" %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block content%}
+
+{% if image_list %}
+<div class="container mt-3">
+    <h1>Image List</h1>
+    <div class="row">
+        {% for image_path, name, owner in image_list %}
+        <div class="col-md-6 mb-3">
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top" src="{{ MEDIA_URL }}{{ image_path }}" alt="{{name}}">
+                <div class="card-body">
+                  <h6 class="card-title"><a href={% url 'imgtool:image' image_name=name %}>{{name}} </a></h6>
+                  <p class="card-text"><a href={% url 'imgtool:user' username=owner %}>{{owner}}</a></p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<p>No polls are available.</p>
+{% endif %}
+
+{% endblock %}

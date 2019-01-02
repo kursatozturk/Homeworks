@@ -1,0 +1,82 @@
+<html>
+<head>
+<title> CENG 783 - Deep Learning - Fall 2018 </title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<style>
+body {
+    background-color: white;
+	color: black;
+}
+font-color: black;
+</style>
+</head>
+
+<center>
+<h1> HW2 <br> 
+(Some exercises are adapted from <a href="http://cs231n.github.io/assignments2016/assignment1/">CS231n</a> course materials of Standford University)</h1>
+</center>
+
+<h2>Deadline</h2>
+17 December, 2018 (midnight).
+
+<h2>Description </h2>
+<p>In this HW, you will implement some of the tools we have covered in the lectures. The goals of this assignment are as follows:</p>
+
+<ul>
+<li>understand and implement the operations/layers in a Convolutional Neural Network.</li>
+<li>apply CNN to a classification problem.</li>
+<li>implement some of the mechanisms that are widely used for understanding/interpreting a trained CNN. More specifically, you will use a pre-trained CNN to show some saliency maps for a given class, generate best images for a given class (a.k.a., deep dream), and learn how to fool a CNN.</li>
+</ul>
+
+<h2>Setup</h2>
+
+<p>Get the code as a zip file <a href="http://kovan.ceng.metu.edu.tr/~sinan/DL/HW2.zip">here</a>. As for the dependencies (similar to HW1):</p>
+
+<p><strong>Use Anaconda:</strong>
+The preferred approach for installing all the HW dependencies is to use <a href="https://www.continuum.io/downloads">Anaconda</a>,
+ which is a Python distribution that includes many of the most popular 
+Python packages for science, math, engineering and data analysis. Once 
+you install it and you're 
+ready to go directly to working on the HW.</p>
+
+<p><strong>Download data:</strong>
+Once you have the starter code, you will need to download the CIFAR-10 and MNIST datasets.
+Run the following from the <code>HW2</code> directory:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">cd </span>cs231n/datasets
+./get_datasets.sh
+</code></pre></div>
+For the CNN exercises, you will need to download another dataset and a pre-trained model. The instructions for these are outlined in the respective exercises.
+
+<p><strong>Start IPython:</strong>
+After you have the MNIST data, you should start the IPython notebook server from the
+<code>HW2</code> directory. If you are unfamiliar with IPython, you should read the
+<a href="http://cs231n.github.io/ipython-tutorial">IPython tutorial</a>.</p>
+
+
+<h3>Submitting your work:</h3>
+
+<p>Once you are done working run the <code>collectSubmission.sh</code> script; this will produce a file called
+<code>HW2.zip</code>. Upload this file on the METUclass page of the course.</p>
+
+<h3> Task 1: Modular layers in CNN (20 points) </h3>
+
+<p> The IPython Notebook <strong>task1_layers.ipynb</strong> will walk you through implementing the layers in a CNN in a modular manner.</p>
+
+<h3> Task 2: Combine modular layers to train a CNN (20 points) </h3>
+
+<p> The IPython Notebook <strong>task2_convnet.ipynb</strong> will walk you through combining the modular layers to implement a CNN architecture.</p>
+
+<h3>Task 3: Image Gradients (5 points) </h3>
+
+<p>The IPython Notebook <strong>task3_image_gradients.ipynb</strong> will walk you through how you can use a trained CNN to compute saliency maps, and how you can fool a trained CNN.</p>
+
+<h3>Task 4: Image Generation (15 points) </h3>
+
+<p>The IPython Notebook <strong>task4_image_generation.ipynb</strong> will walk you through implementing some of the mechanisms used for understanding/interpreting a trained CNN.</p>
+
+<h3>Task 5: Blood Pressure from a PPG signal using CNNs (40 points) </h3>
+
+<p>Solve Task 4 in HW1 using CNNs this time. The problem definition is exactly the same. The only difference is that you will use a CNN this time. Build your solution in the IPython Notebook <strong>task5_blood_pressure.ipynb</strong>.
+</p>
+
+</html>

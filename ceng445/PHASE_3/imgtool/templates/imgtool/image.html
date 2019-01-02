@@ -1,0 +1,24 @@
+{% extends "imgtool/base.html" %}
+
+{% block title %}Image Page{% endblock %}
+
+{% block content%}
+
+<div class="container-fluid">
+    <div class="jumbotron">
+        <h1>{{name}}</h1>
+        <img style="width: 100%" src="{{ MEDIA_URL }}{{path_img}}">
+        <hr class="my-4">
+        <h6 class="card-title"><a href={% url 'imgtool:image' image_name=name %}>{{name}} </a></h6>
+        <p class="card-text"><a href={% url 'imgtool:user' username=owner %}>{{owner}}</a></p>
+        {% if user.username == owner %}
+        
+        <a href = "{% url 'imgtool:rulepage' image_name=name %}"> <button type="button" class="btn btn-success">Add Rule</button> </a>  
+        <a href = "{% url 'imgtool:delrulepage' image_name=name %}"> <button type="button" class="btn btn-warning">Delete Rule</button> </a>
+        <a href = "{% url 'imgtool:delimage' image_name=name %}"> <button type="button" class="btn btn-danger">Delete Image</button> </a>
+        <a href = "{% url 'imgtool:changedefact' image_name=name %}"> <button type="button" class="btn btn-danger">Change Default Action</button> </a>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

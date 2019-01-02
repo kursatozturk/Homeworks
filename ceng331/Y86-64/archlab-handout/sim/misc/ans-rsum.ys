@@ -1,0 +1,36 @@
+# 2178187
+# Kürşat Öztürk
+
+.pos 0
+	irmovq stack, %rsp
+	irmovq ele1, %rdi
+	call rsum_list
+halt
+
+.align 8
+ele1:
+.quad 0x00a
+.quad ele2
+ele2:
+.quad 0x0b0
+.quad ele3
+ele3:
+.quad 0xc00
+.quad 0
+
+rsum_list:
+    xorq    %rax, %rax
+    andq    %rdi, %rdi
+    jle     .DONE
+    pushq   %r8
+    mrmovq  (%rdi), %r8
+    mrmovq  8(%rdi), %rdi
+    call    rsum_list
+    addq    %r8, %rax
+    popq    %r8
+.DONE:
+    ret
+
+
+.pos 200
+    stack:

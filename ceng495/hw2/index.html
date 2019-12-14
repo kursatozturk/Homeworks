@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>eBay</title>
+    <script src="https://s3.amazonaws.com/stitch-sdks/js/bundles/4.3.1/stitch.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="main.js"></script>
+</head>
+<body>
+    <div id='root'>
+        <div id='homepage'>            
+            <userbar
+                @home_page='home_page'
+                @store='user_page'
+                @order_history='order_history_page'
+                @sale='sale_page'
+                @deposit='deposit'
+                @withdraw='withdraw'
+                @logout='logout'
+                :user='user'
+                >
+
+            </userbar>
+
+            <div v-if='logged_in' class='container jumbotron'>
+                <div class='row'>
+                        
+                    <user-info
+                        @order_history='order_history_page'
+                        :user='user_info'>
+                    </user-info>
+                    <div class='col-sm-9' v-if='!salePage && !orderPage'>
+                        <table  class='table table-dark table-responsive-md'>
+                            <thead>
+                                <tr>
+                                    <th scope='col'> Name </th>
+                                    <th scope='col'> Price </th>
+                                    <th scope='col'> Quantity </th>
+                                    <th scope='col'> Photo </th>
+                                    <th scope='col'> Seller </th>
+                                    <th scope='col'> Seller Rating </th>
+                                    <th scope='col'> </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    is='product-viewer'
+                                    v-for="product in product_list"
+                                    :product="product"
+                                    :key="product.product_name"
+                                    @buy_item='buy'
+                                    @seller='user_page'
+                                    >
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class='col-sm-9' v-else-if='!salePage'>
+                            <table  class='table table-dark table-responsive-md'>
+                                    <thead>
+                                        <tr>
+                                            <th scope='col'> Name </th>
+                                            <th scope='col'> Price </th>
+                                            <th scope='col'> Quantity </th>
+                                            <th scope='col'> Photo </th>
+                                            <th scope='col'> Seller </th>
+                                            <th scope='col'> Seller Rating </th>
+                                            <th scope='col'> Rate </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            is='order-history'
+                                            v-for="purchase in purchase_list"
+                                            :purchase="purchase"
+                                            :key="purchase.product.product_name"
+                                            @seller='user_page'
+                                            @rate_seller='rate_trade'
+                                            >
+                                        </tr>
+                                    </tbody>
+                                </table>
+                    </div>
+                <div class='col-sm-4' v-else>
+                        <product-template
+                            @product_creation='create_product'>
+        
+                        </product-template>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class='row' v-else>
+                <div class='col-sm-3'>
+                    <label for='username'>Username: </label>
+                    <input class="form-control" type='text' name='username' v-model="username">
+                    <button class='btn btn-secondary' @click='login'>Login</button>
+                    <button class='btn btn-secondary' @click='register'>Register</button>
+                    <button class='btn btn-secondary' @click='delete_user'>Delete</button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>
+<script>
+
+    var hp = new Vue({
+        el: '#homepage',
+        data: {
+            username: '',
+            user: null,
+            user_info: null,
+            logged_in: false,
+            product_list: [],
+            salePage: false,
+            orderPage: false,
+            purchase_list: [],
+        },
+        methods: {
+            rate_trade(purchase_id, rate){
+                var parent = this;
+                if(rate == 0){
+                    alert('Please choose a Number!!!'.toUpperCase());
+                    return;
+                }
+                client.callFunction('rate_trade', [this.user.username, purchase_id, rate])
+                .then(function(res){
+                    parent.home_page();
+                }).catch(function(err){
+                    alert(err);
+                })
+            },
+            deposit(amount){
+                var parent = this;
+                client.callFunction('deposit', [this.user.username, amount])
+                .then(function(re){
+                    parent.login(parent.user.username);
+                }).catch(function(err){
+                    alert(err);
+                });
+            },
+            withdraw(amount){
+                var parent = this;
+                client.callFunction('withdraw', [this.user.username, amount])
+                .then(function(re){
+                    parent.login(parent.user.username);
+                }).catch(function(err){
+                    alert(err);
+                });
+            },
+            buy(product, quantity){
+                var parent = this;
+                if(this.user.username !== product.seller){
+                    client.callFunction('buy_item', [product._id.toString(), parent.user.username, quantity])
+                    .then(function(res){
+                        if(res == 'success'){
+                            alert('successfully bought!');
+                            parent.login(parent.user.username);
+                        }
+                        else{
+                            alert(res);
+
+                        }
+                    })
+                }
+                else{
+                    alert('You cannot buy what you sell!'.toUpperCase());
+                }
+            },
+            create_product(product){
+                var parent = this;
+                return client.callFunction('put_on_sale', [product.name,
+                                                    product.photo_link,
+                                                    product.price,
+                                                    product.quantity,
+                                                    this.user.username])
+                .then( function(s){
+                    parent.home_page();
+                }).catch( function(err){
+                    alert(err);
+                });
+            },
+            sale_page(){
+                this.salePage = true;
+            },
+            home_page(){  
+                this.user_info = this.user;
+                this.fetch_feed(null);
+            },
+            user_page(username){
+                var parent = this;
+                return client.callFunction('get_user_info', [username])
+                .then( function( user){
+                    if(user['err']){
+                        alert(user['err']);
+                        return;
+                    }
+                    parent.user_info = user;
+                    parent.fetch_feed(user.username);
+                    return;
+
+                }).catch( function(err){
+                    alert(err);
+                    return;
+                })
+            },
+            fetch_feed(user){
+                this.salePage = false;
+                this.orderPage = false;
+                console.log('fetch_feed');
+                var parent = this;
+                client.callFunction('get_products', [user])
+                .then( function(result){
+                    console.log('result fetched');
+                    parent.product_list = result;
+                }).catch( function(err){
+                    alert(err);
+                });    
+            },
+            order_history_page(username){
+                var parent = this;
+                client.callFunction('get_order_history', [username])
+                .then(function(history){
+                    parent.purchase_list = history;
+                    parent.salePage = false;
+                    parent.orderPage = true;
+                }).catch(function(err){
+                    alert(err);
+                });
+            },
+            login(){
+                if(this.username === ''){
+                    alert('GIVE ME YOUR USERNAME');
+                    return;
+                }
+                var parent = this;
+                client.callFunction('get_user_info', [this.username])
+                .then( function( user){
+                    parent.user = user;
+                    parent.user_info = user;
+                    parent.logged_in = true;
+                    parent.home_page();
+                })
+                .catch( function(err){
+                    alert(err);
+                });
+            },
+            register(){
+                if(this.username === ''){
+                    alert('GIVE ME YOUR USERNAME');
+                    return;
+                }
+                console.log(this.username);
+                var parent = this;
+                client.callFunction('create_user', [this.username])
+                .then( function(result){
+                    if (result['err']){
+                        alert(result['err']);
+                        return;
+                    }
+                    parent.login();
+                }).catch(function(err){
+                    console.log('ERROR');
+                    console.log(err);
+                });
+            },
+            delete_user(){
+                if(this.username === ''){
+                    alert('GIVE ME YOUR USERNAME');
+                    return;
+                }
+                client.callFunction('delete_user', [this.username])
+                .then( function(result){
+                    hp.logged_in = false;
+                    hp.user = null;
+                    hp.user_info = null;
+                }).catch( function(err){
+                    alert(err);
+                });
+            },
+            logout(){
+                if(this.logged_in){
+                    this.user = null;
+                    this.user_info = null;
+                    this.logged_in = false;
+                    this.username = '';
+                }
+            }
+        }
+    });
+</script>

@@ -1,0 +1,95 @@
+{% load static %}
+<! DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="{% static "kingofqr/main.js" %}"></script>
+    </head>
+    <body>
+        <h1 id='h1is' align=center>QR Create & Read on the Cloud!! </h1>
+        <div class="container" id="root">
+            <div class="jumbotron">
+                <div class='form-group'>
+                    <form id='createqr' method="GET">
+                        {% csrf_token %}
+                        <label for="data">DATA: </label>
+                        <input type="text" name="data" class="input-group-text"/>
+                        <label for="color">Color of QR: </label> 
+                        <input type="text" name="color" placeholder="hex value or B-G-R" class="input-group-text"/>
+                        <label for="bgcolor">Background Color: </label>
+                        <input type="text" name="bgcolor" placeholder="hex value or B-G-R"  class="input-group-text"/>
+                        <button type="submit" class='btn btn-success' id="create">Create!</button>
+                    </form>
+                </div>
+                <div class="input-group">
+                    <div class='form-group'>    
+                        <form enctype="multipart/form-data" id='readqr' method="POST">
+                            {% csrf_token %}
+                            <!-- MAX_FILE_SIZE (maximum file size in bytes) must precede the file input field used to upload the QR code image -->
+                            <input type="hidden" name='MAX_FILE_SIZE' value="1048576"  />
+                            <div>
+                            <!-- The "name" of the input field has to be "file" as it is the name of the POST parameter -->
+                                <label class='custom-file-label'> Choose QR code image to read/scan: </label> 
+                                <input name="file" type="file" class='custom-file-input'/>
+                                <input type="submit" value="Read QR code" class='btn btn-success'/>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class='container'>
+                    <div id='showData' class='jumbotron'>
+                        <h5 style="visibility:hidden;" id='dataHeader'>Data is : <span id='dataSpan'></span></h5>
+                        <img style="visibility:hidden" id='qrimg'>
+                    </div>
+                </div>
+            </div> 
+        </div>
+       
+            
+
+    </body>
+    <script>
+        
+$(document).ready(function(){
+    $('form#readqr').submit(function(e){
+        e.preventDefault();
+        var formData = new FormData(($(this)[0]));
+        $.post({
+            method: 'POST',
+            url: 'read/',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+        }).done(function(d){
+            if(d['data']){
+                console.log(d['data']);
+                $('img#qrimg').css('visibility', 'hidden');
+                $('span#dataSpan')[0].textContent = d['data'];
+                $('#dataHeader').css('visibility', 'visible');
+            }
+        });
+    });
+
+    $('form#createqr').submit(function(e){
+        e.preventDefault();
+        var formData = new FormData(($(this)[0]));
+        $.post({
+            url: 'create/',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false
+        }).done(function(d){    
+            $('#qrimg').attr('src', `${d}`);
+            $('#qrimg').css('visibility', 'visible');
+            $('#dataHeader').css('visibility', 'hidden');
+            
+        });
+    });
+
+});
+
+    </script>
+</html>
